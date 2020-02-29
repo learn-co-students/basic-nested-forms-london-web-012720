@@ -1,6 +1,8 @@
 class PeopleController < ApplicationController
   def new
     @person = Person.new
+    @person.addresses.build(address_type: 'work')
+    @person.addresses.build(address_type: 'home')
   end
 
   def create    
@@ -15,6 +17,17 @@ class PeopleController < ApplicationController
   private
 
   def person_params
-    params.require(:person).permit(:name)
+    params.require(:person).permit(:name, addresses_attributes: [:street_address_1, 
+      :street_address_2, :city, :state, :zipcode, :address_type])
   end
 end
+
+
+	# app/models/song.rb
+	 
+	class Song < ActiveRecord::Base
+	  def artist_attributes=(artist)
+	    self.artist = Artist.find_or_create_by(name: artist[:name])
+	    self.artist.update(artist)
+	  end
+	end
